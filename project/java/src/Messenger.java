@@ -270,12 +270,23 @@ public class Messenger {
                 System.out.println("1. Add to contact list");
                 System.out.println("2. Browse contact list");
                 System.out.println("3. Write a new message");
+                //adding these
+                System.out.println("4. Browse blocked list");
+                System.out.println("5. Browse current chats");
+                System.out.println("6. Create a new chat");
+                System.out.println("8. Delete Account");
+                //done adding new ones
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
                    case 1: AddToContact(esql); break;
                    case 2: ListContacts(esql); break;
                    case 3: NewMessage(esql); break;
+                   case 4:
+                   case 5:
+                   case 6: NewMessage(esql); break;
+                   //case 7: (esql); break;
+                   case 8: NewMessage(esql); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -375,6 +386,7 @@ public class Messenger {
       }
    }//end
 
+//-----------------Main menu (after login)-------------
    public static void AddToContact(Messenger esql){
       // Your code goes here.
       // ...
@@ -392,12 +404,73 @@ public class Messenger {
       // ...
       // ...
    }//end 
-
-
-   public static void Query6(Messenger esql){
+   
+   public static void ListBlocked(Messenger esql){
       // Your code goes here.
       // ...
       // ...
    }//end Query6
+   
+   public static void BrowseChats(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end Query6
+   
+   public static void NewChat(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end Query6
+   
+   public static void DeleteAccount(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end Query6
+   
+//---------------Chat Menu fuctions--------------------
+   public static void AddMembersToChat(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+   public static void DeleteMembersFromChat(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+   public static void DeleteChat(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+   public static void ShowMessages(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+//---------------Message Menu Fuctions----------------
+   public static void CreateNewMessage(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+   public static void EditMessage(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
+   
+   public static void DeleteMessage(Messenger esql){
+      // Your code goes here.
+      // ...
+      // ...
+   }//end
 
 }//end Messenger
