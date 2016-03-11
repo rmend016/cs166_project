@@ -282,11 +282,11 @@ public class Messenger {
                    case 1: AddToContact(esql); break;
                    case 2: ListContacts(esql); break;
                    case 3: NewMessage(esql); break;
-                   case 4:
-                   case 5:
-                   case 6: NewMessage(esql); break;
+                   case 4: ListBlocked(esql); break;
+                   case 5: BrowseChats(esql); break;
+                   case 6: NewChat(esql); break;
                    //case 7: (esql); break;
-                   case 8: NewMessage(esql); break;
+                   case 8: DeleteAccount(esql); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
