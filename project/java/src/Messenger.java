@@ -279,8 +279,8 @@ public class Messenger {
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
-                   case 1: AddToContact(esql); break;
-                   case 2: ListContacts(esql); break;
+                   case 1: AddToContact(authorisedUser, esql); break;
+                   case 2: ListContacts(authorisedUser, esql); break;
                    case 3: NewMessage(esql); break;
                    case 4: ListBlocked(esql); break;
                    case 5: BrowseChats(esql); break;
@@ -387,23 +387,43 @@ public class Messenger {
    }//end
 
 //-----------------Main menu (after login)-------------
-   public static void AddToContact(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end
+	//When adding a new contact, ask for the username of the new contact
+	//then add that contact to the user_list of the current user
+   public static void AddToContact(String authorisedUser, Messenger esql){
+	   //get list_id of authorized(current) user
+	   //request name of new contact from user
+	   //insert into user_list_contains (new contact login, list_id)
+	   try{
+         System.out.print("\tEnter login of user to add: ");
+         String userToAdd = in.readLine();
+		 String query1 = String.format("SELECT U.contact_list FROM Usr U WHERE U.login = '%s'", authorisedUser);
+		 List<List<String>> contact_list = esql.executeQueryAndReturnResult(query1); 
+		 int i = Integer.parseInt(contact_list.get(0).get(0));
+		 String query = String.format("INSERT INTO USER_LIST_CONTAINS(list_id, list_member) VALUES ('%s', '%s')", i, userToAdd);
+		 esql.executeUpdate(query);
+	   }catch(Exception e){
+		   System.err.println (e.getMessage ());
+	   }
+   }
 
-   public static void ListContacts(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end
+	//access the user's contacts and list them by name
+   public static void ListContacts(String authorisedUser, Messenger esql){
+	   try{
+		String query = String.format("SELECT C.list_member FROM Usr U, USER_LIST_CONTAINS C WHERE U.login = '%s' AND U.contact_list = C.list_id ",authorisedUser);
+		int success = esql.executeQueryAndPrintResult (query);
+	   }catch(Exception e){
+         System.err.println (e.getMessage ());
+      }
+   }
 
+	//Let the usr create a new message
+	//create a new chat in the process
+	//generate a new chat_id from function
+	//**ask the user if it's a private chat or  
+	//generate a new message serial id from sequence function
+	//ask the user for the 
    public static void NewMessage(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end 
+   } 
    
    public static void ListBlocked(Messenger esql){
       // Your code goes here.
