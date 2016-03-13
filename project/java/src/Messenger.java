@@ -435,10 +435,37 @@ public class Messenger {
    }
    
    //show a user their chats
+   //We might want to have this method ask the user what chat they want to view
+   //and then call view chat from here
+   //for this to work the rest of the chat methods need to be implemented
    public static void BrowseChats(String authorisedUser, Messenger esql){
         try{
 		String query = String.format("SELECT C.chat_id FROM CHAT_LIST C WHERE C.member = '%s'",authorisedUser);
 		int success = esql.executeQueryAndPrintResult (query);
+		System.out.print("\tEnter chat_id of chat to view: ");
+		String chat_to_view = in.readLine();
+		String query1 = String.format("SELECT init_sender FROM CHAT WHERE chat_id = '%s'", chat_to_view);
+		List<List<String>> init_sender = esql.executeQueryAndReturnResult(query1);
+		String init = init_sender.get(0).get(0);
+		if(authorisedUser == init){
+		    boolean usermenu = true;
+		    while(usermenu){
+			System.out.print("\tEnter Choice: ");
+			System.out.print("\t1. Add Members ");
+			System.out.print("\t2. Delete Members");
+			System.out.print("\t3. Delete Chat ");
+			System.out.print("\t4. Continue to Messages ");
+			switch(readChoice()){
+			    case 1: AddMembersToChat(esql);
+			    case 2: DeleteMembersFromChat(esql); break;
+			    case 3: DeleteChat(esql); break;
+			    case 4: usermenu=false; break;
+			    default : System.out.println("Unrecognized choice!"); break;
+			}
+		    }
+		    ShowMessages(esql);
+		    //ask if they want to load earlier messages here
+	       }
 	   }catch(Exception e){
          System.err.println (e.getMessage ());
       }
@@ -496,11 +523,18 @@ public class Messenger {
       // ...
    }//end
    
+   //preliminary: asks user for chat_id and prints out the last 10 messages from the chat
+   //there should be a posibility to load earlier messages: in batches of 10.
+   //displays messages in order of timestamp
    public static void ShowMessages(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end
+       try{
+	 System.out.print("\tEnter chat_id of chat to view: ");
+	 String chat_to_view = in.readLine();
+	 String query = String.format("SELECT sender_login, msg_timestamp, msg_text FROM MESSAGE WHERE chat_id = '%s'",chat_to_view );
+       }catch(Exception e){
+	   System.err.println (e.getMessage ());
+       }
+   }
    
 //---------------Message Menu Fuctions----------------
    public static void CreateNewMessage(Messenger esql){
