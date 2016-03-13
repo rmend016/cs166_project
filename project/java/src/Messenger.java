@@ -282,11 +282,11 @@ public class Messenger {
                    case 1: AddToContact(authorisedUser, esql); break;
                    case 2: ListContacts(authorisedUser, esql); break;
                    case 3: NewMessage(esql); break;
-                   case 4: ListBlocked(esql); break;
-                   case 5: BrowseChats(esql); break;
-                   case 6: NewChat(esql); break;
+                   case 4: ListBlocked(authorisedUser, esql); break;
+                   case 5: BrowseChats(authorisedUser, esql); break;
+                   case 6: NewChat(authorisedUser, esql); break;
                    //case 7: (esql); break;
-                   case 8: DeleteAccount(esql); break;
+                   case 8: DeleteAccount(authorisedUser, esql); usermenu=false; break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -394,8 +394,8 @@ public class Messenger {
 	   //request name of new contact from user
 	   //insert into user_list_contains (new contact login, list_id)
 	   try{
-         System.out.print("\tEnter login of user to add: ");
-         String userToAdd = in.readLine();
+		 System.out.print("\tEnter login of user to add: ");
+		 String userToAdd = in.readLine();
 		 String query1 = String.format("SELECT U.contact_list FROM Usr U WHERE U.login = '%s'", authorisedUser);
 		 List<List<String>> contact_list = esql.executeQueryAndReturnResult(query1); 
 		 int i = Integer.parseInt(contact_list.get(0).get(0));
@@ -425,29 +425,57 @@ public class Messenger {
    public static void NewMessage(Messenger esql){
    } 
    
-   public static void ListBlocked(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end Query6
+   public static void ListBlocked(String authorisedUser, Messenger esql){
+      try{
+		String query = String.format("SELECT C.list_member FROM Usr U, USER_LIST_CONTAINS C WHERE U.login = '%s' AND U.block_list = C.list_id ",authorisedUser);
+		int success = esql.executeQueryAndPrintResult (query);
+	   }catch(Exception e){
+         System.err.println (e.getMessage ());
+      }
+   }
    
-   public static void BrowseChats(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end Query6
+   //show a user their chats
+   public static void BrowseChats(String authorisedUser, Messenger esql){
+        try{
+		String query = String.format("SELECT C.chat_id FROM CHAT_LIST C WHERE C.member = '%s'",authorisedUser);
+		int success = esql.executeQueryAndPrintResult (query);
+	   }catch(Exception e){
+         System.err.println (e.getMessage ());
+      }
+
+   }
    
-   public static void NewChat(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end Query6
+   //let a user make a NewChat
+   //generate new chat_id from sequence
+   //ask if it's private or public 
+   //set the init sender to authorisedUser
+   public static void NewChat(String authorisedUser,Messenger esql){
+       try{
+	   int new_chat_id = esql.getCurrSeqVal("user_list_list_id_seq"); //can't get value from seq
+	   String query = String.format("INSERT INTO CHAT(chat_id, chat_type, init_sender) VALUES ('%s', private, '%s')", new_chat_id, authorisedUser);
+	   esql.executeUpdate(query);
+	   System.out.print("\tWould you like to add more users?");
+	   System.out.print("\t1. No");
+	   System.out.print("\t2. Yes");
+	   switch(readChoice()){
+	      case 1: break;
+              case 2: AddMembersToChat(esql); break;
+              default : System.out.println("Unrecognized choice!"); break;
+	   }
+	}catch(Exception e){
+		   System.err.println (e.getMessage ());
+	}
+   }
    
-   public static void DeleteAccount(Messenger esql){
-      // Your code goes here.
-      // ...
-      // ...
-   }//end Query6
+   //Delete Row in Usr Table 
+   public static void DeleteAccount(String authorisedUser,Messenger esql){
+       try{
+	   String query = String.format("DELETE FROM USR WHERE login = '%s'", authorisedUser);
+	   esql.executeUpdate(query);
+       }catch(Exception e){
+	   System.err.println (e.getMessage ());
+       }
+   }
    
 //---------------Chat Menu fuctions--------------------
    public static void AddMembersToChat(Messenger esql){
